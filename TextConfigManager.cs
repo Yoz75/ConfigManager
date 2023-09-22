@@ -53,7 +53,7 @@ namespace ConfigManager
             File.WriteAllText(ConfigPath, config);
         }
 
-        public string? GetValueFromConfig(string name)
+        public string? GetDataFromConfig(string name)
         {
 
 
