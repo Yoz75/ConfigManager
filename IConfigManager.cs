@@ -2,7 +2,7 @@
 
 namespace ConfigManager
 {
-    internal interface IConfigManager
+    public interface IConfigManager
     {
         /// <summary>
         ///  Creates new parameter in config
