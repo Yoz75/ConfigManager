@@ -1,5 +1,4 @@
 ﻿
-using System.Text;
 namespace ConfigManager
 {
     public class TextConfigManager : IConfigManager
