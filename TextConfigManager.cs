@@ -1,4 +1,6 @@
 ﻿
+using System.IO;
+using System;
 namespace ConfigManager
 {
     public class TextConfigManager : IConfigManager
@@ -10,11 +12,6 @@ namespace ConfigManager
             if (!File.Exists(ConfigPath))
             {
                 File.Create(ConfigPath);
-                using (FileStream config = new FileStream(ConfigPath, FileMode.Append))
-                {
-                    config.WriteByte(0xAA); //0xAA - показатель, что конфиг байтовый,
-                                            //и ByteConfigManager не сможет его прочитать
-                }
             }
         }
 
