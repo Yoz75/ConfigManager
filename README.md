@@ -1,7 +1,7 @@
 # ConfigManager
 
-##Eng
-###How to use
+## Eng
+### How to use
 _1) Import namespace:_ <br>
 ```using namespace ConfigManager;``` <br>
 _2) Create new TextConfigManager object (or create new class that implements IConfigManager):_ <br>
@@ -14,8 +14,8 @@ _4) Or get variable from config:_ <br>
 ```string? playerName = GameSavesConfig.GetDataFromConfig("playerName);``` <br>
 
 
-##Rus
-###Использование:
+## Rus
+### Использование:
 _1) Импортируйте неймспейс:_ <br>
 ```using namespace ConfigManager;``` <br>
 _2) Создайте новый объект типа TextConfigManager (или реализуйте интерфейс IConfigManager):_ <br>
