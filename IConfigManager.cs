@@ -24,7 +24,7 @@ namespace ConfigManager
         /// </summary>
         /// <param name="name"> parameter name</param>
         /// <returns>null if parameter is not exists</returns>
-        public string? GetValueFromConfig(string name);
+        public string? GetDataFromConfig(string name);
 
     }
 }
