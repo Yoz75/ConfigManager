@@ -1,6 +1,8 @@
 ﻿
 using System.IO;
 using System;
+using System.Runtime.ExceptionServices;
+
 namespace ConfigManager
 {
     public class TextConfigManager : IConfigManager
@@ -59,14 +61,49 @@ namespace ConfigManager
 
             foreach (var parameter in parameters)
             {
-                if (parameter.Contains(name))
+                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
                 {
-                    var values = parameter.Split(':');
-                    return values[1];
+                    var parameterParts = parameter.Split(':');
+                    return parameterParts[1];
                 }
             }
             return null;
 
+        }
+
+        public bool IsParameterInConfig(string name)
+        {
+            var config = File.ReadAllText(ConfigPath);
+            var parameters = config.Split('\n', '\r');
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool IsDataInParameter(string name, string value)
+        {
+            var config = File.ReadAllText(ConfigPath);
+            var parameters = config.Split('\n', '\r');
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
+                {
+                    var parameterParts = parameter.Split(':');
+                    foreach (var part in parameterParts)
+                    {
+                        if (part == value)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
     }
 }

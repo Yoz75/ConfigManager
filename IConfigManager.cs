@@ -18,7 +18,6 @@ namespace ConfigManager
         /// <param name="value">parameter value</param>
         public void SetDataInConfig(string name, string value);
 
-
         /// <summary>
         /// Gets value from config by name
         /// </summary>
@@ -26,5 +25,20 @@ namespace ConfigManager
         /// <returns>null if parameter is not exists</returns>
         public string? GetDataFromConfig(string name);
 
+        /// <summary>
+        /// Tries get parameter in config.
+        /// </summary>
+        /// <param name="name"> parameter name</param>
+        /// <returns>Returns true if parameter defined in config
+        /// and false if not</returns>
+        public bool IsParameterInConfig(string name);
+
+        /// <summary>
+        /// Tries get parameter with value 
+        /// </summary>
+        /// <param name="name"> parameter name</param>
+        /// <param name="value"> parameter data</param>
+        /// <returns>Returns true if parameter contains value</returns>
+        public bool IsDataInParameter(string name, string value);
     }
 }
