@@ -13,7 +13,7 @@ namespace ConfigManager
             ConfigPath = configPath;
             if (!File.Exists(ConfigPath))
             {
-                File.Create(ConfigPath);
+                File.Create(ConfigPath).Close();
             }
         }
 
