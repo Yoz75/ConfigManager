@@ -4,6 +4,13 @@ namespace ConfigManager
 {
     public interface IConfigManager
     {
+
+        public string ParameterSplitter
+        {
+            get;
+            set;
+        }
+
         /// <summary>
         ///  Creates new parameter in config
         /// </summary>

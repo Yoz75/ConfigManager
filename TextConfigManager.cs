@@ -1,15 +1,30 @@
 ﻿
 using System.IO;
 using System;
-using System.Runtime.ExceptionServices;
+
 
 namespace ConfigManager
 {
     public class TextConfigManager : IConfigManager
     {
+
+        private readonly string ParameterSplitter_;
+        public string ParameterSplitter
+        { 
+            get
+            {
+                return ParameterSplitter_;
+            }
+            set
+            {
+                throw new ArgumentException("ParameterSplitter is readonly, but you trying to put here value!");
+            }
+        }
+
         private string ConfigPath;
-        public TextConfigManager(string configPath)
+        public TextConfigManager(string configPath, string splitter = ":")
         {
+        ParameterSplitter_ = splitter;
             ConfigPath = configPath;
             if (!File.Exists(ConfigPath))
             {
@@ -19,22 +34,22 @@ namespace ConfigManager
 
         public void AddDataToConfig(string name, string value)
         {
-            if (name.Contains(':') || value.Contains(':'))
+            if (name.Contains(ParameterSplitter) || value.Contains(ParameterSplitter))
             {
-                throw new ArgumentException("Name or value contains \':\'");
+                throw new ArgumentException($"Name or value contains \"{ParameterSplitter}\"");
             }
 
 
             var config = File.AppendText(ConfigPath);
-            config.WriteLine($"{name}:{value}");
+            config.WriteLine($"{name}{ParameterSplitter}{value}");
             config.Close();
         }
 
         public void SetDataInConfig(string name, string value)
         {
-            if (name.Contains(':') || value.Contains(':'))
+            if (name.Contains(ParameterSplitter) || value.Contains(ParameterSplitter))
             {
-                throw new ArgumentException("Name or value contains \':\'");
+                throw new ArgumentException($"Name or value contains \'{ParameterSplitter}\'");
             }
 
             var config = File.ReadAllText(ConfigPath);
@@ -42,9 +57,9 @@ namespace ConfigManager
             int i = 0;
             foreach (var parameter in parameters)
             {
-                if (parameter.Contains($"{name}:"))
+                if (parameter.Contains($"{name}{ParameterSplitter}"))
                 {
-                    parameters[i] = $"{name}:{value}";
+                    parameters[i] = $"{name}{ParameterSplitter}{value}";
                     config = string.Concat<string>(parameters);
                 }
                 i++;
@@ -61,9 +76,9 @@ namespace ConfigManager
 
             foreach (var parameter in parameters)
             {
-                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
+                if (parameter.Contains(name) && !parameter.Contains($"{ParameterSplitter}{name}"))
                 {
-                    var parameterParts = parameter.Split(':');
+                    var parameterParts = parameter.Split(ParameterSplitter);
                     return parameterParts[1];
                 }
             }
@@ -77,7 +92,7 @@ namespace ConfigManager
             var parameters = config.Split('\n', '\r');
             foreach (var parameter in parameters)
             {
-                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
+                if (parameter.Contains(name) && !parameter.Contains($"{ParameterSplitter}{name}"))
                 {
                     return true;
                 }
@@ -91,9 +106,9 @@ namespace ConfigManager
             var parameters = config.Split('\n', '\r');
             foreach (var parameter in parameters)
             {
-                if (parameter.Contains(name) && !parameter.Contains($":{name}"))
+                if (parameter.Contains(name) && !parameter.Contains($"{ParameterSplitter}{name}"))
                 {
-                    var parameterParts = parameter.Split(':');
+                    var parameterParts = parameter.Split(ParameterSplitter);
                     foreach (var part in parameterParts)
                     {
                         if (part == value)
