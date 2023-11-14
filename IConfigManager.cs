@@ -1,5 +1,6 @@
 ﻿
 
+using System.Collections;
 namespace ConfigManager
 {
     public interface IConfigManager
@@ -33,6 +34,13 @@ namespace ConfigManager
         public string? GetDataFromConfig(string name);
 
         /// <summary>
+        /// Creates new parameter in config that contains array
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void AddArrayDataToConfig(string name, IList value);
+
+        /// <summary>
         /// Tries get parameter in config.
         /// </summary>
         /// <param name="name"> parameter name</param>
@@ -47,5 +55,6 @@ namespace ConfigManager
         /// <param name="value"> parameter data</param>
         /// <returns>Returns true if parameter contains value</returns>
         public bool IsDataInParameter(string name, string value);
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿
-using System.IO;
 using System;
+using System.Collections;
+using System.IO;
 
 
 namespace ConfigManager
@@ -10,7 +11,7 @@ namespace ConfigManager
 
         private readonly string ParameterSplitter_;
         public string ParameterSplitter
-        { 
+        {
             get
             {
                 return ParameterSplitter_;
@@ -24,7 +25,7 @@ namespace ConfigManager
         private string ConfigPath;
         public TextConfigManager(string configPath, string splitter = ":")
         {
-        ParameterSplitter_ = splitter;
+            ParameterSplitter_ = splitter;
             ConfigPath = configPath;
             if (!File.Exists(ConfigPath))
             {
@@ -39,6 +40,10 @@ namespace ConfigManager
                 throw new ArgumentException($"Name or value contains \"{ParameterSplitter}\"");
             }
 
+            if (File.ReadAllText(ConfigPath).Contains($"{name}{ParameterSplitter}{value}"))
+            {
+                throw new Exception($"{name} already exists!");
+            }
 
             var config = File.AppendText(ConfigPath);
             config.WriteLine($"{name}{ParameterSplitter}{value}");
@@ -84,6 +89,38 @@ namespace ConfigManager
             }
             return null;
 
+        }
+        public void AddArrayDataToConfig(string name, IList value)
+        {
+            for (int i = 0; i < value.Count; i++)
+            {
+                if (value[i] is string collectionElement)
+                {
+                    if (collectionElement.Contains(ParameterSplitter))
+                    {
+                        throw new ArgumentException($"Name or value contains \"{ParameterSplitter}\"");
+                    }
+                }
+                else if (name.Contains(ParameterSplitter))
+                {
+                    throw new ArgumentException($"Name or value contains \"{ParameterSplitter}\"");
+                }
+            }
+            var config = File.AppendText(ConfigPath);
+            string allValues = "[";
+            for (int i = 0; i < value.Count; i++)
+            {
+                if (i != value.Count-1)
+                {
+                    allValues += $"\"{value[i].ToString()}\",";
+                }
+                else
+                {
+                    allValues += $"\"{value[i]}\"]";
+                }
+            }
+            config.WriteLine($"{name}:{allValues}");
+            config.Close();
         }
 
         public bool IsParameterInConfig(string name)
