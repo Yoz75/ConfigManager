@@ -90,7 +90,7 @@ namespace ConfigManager
             return null;
 
         }
-        public void AddArrayDataToConfig(string name, IList value)
+        public void AddCollectionDataToConfig(string name, IList value)
         {
             for (int i = 0; i < value.Count; i++)
             {
@@ -123,7 +123,7 @@ namespace ConfigManager
             config.Close();
         }
 
-        public IList GetArrayFromConfig(string name)
+        public IList GetCollectionFromConfig(string name)
         {
             var config = File.ReadAllText(ConfigPath);
             var parameters = config.Split('\n', '\r');

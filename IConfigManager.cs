@@ -35,13 +35,13 @@ namespace ConfigManager
         public string? GetDataFromConfig(string name);
 
         /// <summary>
-        /// Creates new parameter in config that contains array
+        /// Creates new parameter in config that contains collection
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void AddArrayDataToConfig(string name, IList value);
+        public void AddCollectionDataToConfig(string name, IList value);
 
-        public IList GetArrayFromConfig(string name);
+        public IList GetCollectionFromConfig(string name);
 
         /// <summary>
         /// Tries get parameter in config.
