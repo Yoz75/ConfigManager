@@ -110,7 +110,7 @@ namespace ConfigManager
             string allValues = "[";
             for (int i = 0; i < value.Count; i++)
             {
-                if (i != value.Count-1)
+                if (i != value.Count - 1)
                 {
                     allValues += $"\"{value[i].ToString()}\",";
                 }
@@ -122,6 +122,39 @@ namespace ConfigManager
             config.WriteLine($"{name}:{allValues}");
             config.Close();
         }
+
+        public IList GetArrayFromConfig(string name)
+        {
+            var config = File.ReadAllText(ConfigPath);
+            var parameters = config.Split('\n', '\r');
+
+            string[] arrayParts;
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Contains(name) && !parameter.Contains($"{ParameterSplitter}{name}"))
+                {
+                    var parameterParts = parameter.Split(ParameterSplitter);
+                    foreach (var item in parameterParts)
+                    {
+                        if (item.Contains("[\""))
+                        {
+                            arrayParts = item.Split(',');
+                            string arrayPartsString = CollectionToString(arrayParts);
+                            return new string[]
+                            {
+                                CutCharInString(arrayPartsString,'\"')
+                            }
+                            ;
+                        }
+                    }
+                }
+            }
+            return null;
+
+
+
+        }
+
 
         public bool IsParameterInConfig(string name)
         {
@@ -156,6 +189,25 @@ namespace ConfigManager
                 }
             }
             return false;
+        }
+        private string CollectionToString(IList collection)
+        {
+            string result = string.Empty;
+            foreach (var item in collection)
+            {
+                result += " " + item;
+            }
+            return result;
+        }
+
+        private string CutCharInString(string original, char charToCut)
+        {
+            string[] originalSplitted = new string[1];
+            foreach (var item in original)
+            {
+                originalSplitted = original.Split(charToCut);
+            }
+            return CollectionToString(originalSplitted);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿
 
+using System;
 using System.Collections;
 namespace ConfigManager
 {
@@ -39,6 +40,8 @@ namespace ConfigManager
         /// <param name="name"></param>
         /// <param name="value"></param>
         public void AddArrayDataToConfig(string name, IList value);
+
+        public IList GetArrayFromConfig(string name);
 
         /// <summary>
         /// Tries get parameter in config.
