@@ -138,13 +138,12 @@ namespace ConfigManager
                     {
                         if (item.Contains("[\""))
                         {
-                            arrayParts = item.Split(',');
-                            string arrayPartsString = CollectionToString(arrayParts);
-                            return new string[]
-                            {
-                                CutCharInString(arrayPartsString,'\"')
-                            }
-                            ;
+                            string clearedItem; 
+                            clearedItem = CutCharInString(item,'[');
+                            clearedItem = CutCharInString(clearedItem, ']');
+                            clearedItem = CutCharInString(clearedItem, '\"');
+                            arrayParts = clearedItem.Split(',');
+                            return (IList)arrayParts;
                         }
                     }
                 }
@@ -195,12 +194,12 @@ namespace ConfigManager
             string result = string.Empty;
             foreach (var item in collection)
             {
-                result += " " + item;
+                result += item;
             }
             return result;
         }
 
-        private string CutCharInString(string original, char charToCut)
+        private string CutCharInString(in string original, char charToCut)
         {
             string[] originalSplitted = new string[1];
             foreach (var item in original)
