@@ -12,7 +12,8 @@ _3) You can edit existing config data:_ <br>
 ```GameSavesConfig.SetDataInConfig("playerName", "New player name);``` <br>
 _4) Or get variable from config:_ <br>
 ```string? playerName = GameSavesConfig.GetDataFromConfig("playerName);``` <br>
-
+_5) And you can add collection to your config:_<br>
+```GameSavesConfig.AddCollectionDataToConfig("UserInventory",new Item[10])```<br>
 
 ## Rus
 ### Использование:
@@ -26,3 +27,5 @@ _3) Или измените существующие данные:_ <br>
 ```GameSavesConfig.SetDataInConfig("playerName", "New player name);``` <br>
 _4) Или просто получите данные:_ <br>
 ```string? playerName = GameSavesConfig.GetDataFromConfig("playerName);``` <br>
+_5)И можете добавить коллекцию в ваш конфиг:_<br>
+```GameSavesConfig.AddCollectionDataToConfig("UserInventory",new Item[10])```
