@@ -42,7 +42,7 @@ namespace ConfigManager
 
             if (File.ReadAllText(ConfigPath).Contains($"{name}{ParameterSplitter}{value}"))
             {
-                throw new Exception($"{name} already exists!");
+                throw new ConfigException($"{name} already exists!");
             }
 
             var config = File.AppendText(ConfigPath);
@@ -106,7 +106,20 @@ namespace ConfigManager
                     throw new ArgumentException($"Name or value contains \"{ParameterSplitter}\"");
                 }
             }
+
+            if (File.ReadAllText(ConfigPath).Contains($"{name}{ParameterSplitter}{value}"))
+            {
+                throw new ConfigException($"{name} already exists!");
+            }
+
             var config = File.AppendText(ConfigPath);
+            string allValues = StringToConfigArray(value);
+            config.WriteLine($"{name}{ParameterSplitter}{allValues}");
+            config.Close();
+        }
+
+        private static string StringToConfigArray(IList value)
+        {
             string allValues = "[";
             for (int i = 0; i < value.Count; i++)
             {
@@ -119,11 +132,34 @@ namespace ConfigManager
                     allValues += $"\"{value[i]}\"]";
                 }
             }
-            config.WriteLine($"{name}:{allValues}");
-            config.Close();
+
+            return allValues;
         }
 
-        public IList GetCollectionFromConfig(string name)
+        public void SetCollectionDataInConfig(string name, IList value)
+        {
+            if (name.Contains(ParameterSplitter) || value.Contains(ParameterSplitter))
+            {
+                throw new ArgumentException($"Name or value contains \'{ParameterSplitter}\'");
+            }
+
+            var config = File.ReadAllText(ConfigPath);
+            var parameters = config.Split("\n");
+            int i = 0;
+            foreach (var parameter in parameters)
+            {
+                if (parameter.Contains($"{name}{ParameterSplitter}[\""))
+                {
+                    string stringValue = StringToConfigArray(value);
+                    parameters[i] = $"{name}{ParameterSplitter}{stringValue}";
+                    config = string.Concat<string>(parameters);
+                }
+                i++;
+            }
+            File.WriteAllText(ConfigPath, config);
+        }
+
+        public string[] GetCollectionDataFromConfig(string name)
         {
             var config = File.ReadAllText(ConfigPath);
             var parameters = config.Split('\n', '\r');
@@ -143,7 +179,7 @@ namespace ConfigManager
                             clearedItem = CutCharInString(clearedItem, ']');
                             clearedItem = CutCharInString(clearedItem, '\"');
                             arrayParts = clearedItem.Split(',');
-                            return (IList)arrayParts;
+                            return arrayParts;
                         }
                     }
                 }
@@ -153,7 +189,6 @@ namespace ConfigManager
 
 
         }
-
 
         public bool IsParameterInConfig(string name)
         {
@@ -189,15 +224,6 @@ namespace ConfigManager
             }
             return false;
         }
-        private string CollectionToString(IList collection)
-        {
-            string result = string.Empty;
-            foreach (var item in collection)
-            {
-                result += item;
-            }
-            return result;
-        }
 
         private string CutCharInString(in string original, char charToCut)
         {
@@ -206,7 +232,7 @@ namespace ConfigManager
             {
                 originalSplitted = original.Split(charToCut);
             }
-            return CollectionToString(originalSplitted);
+            return string.Concat<string>(originalSplitted);
         }
     }
 }

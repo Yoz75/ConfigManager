@@ -1,6 +1,4 @@
 ﻿
-
-using System;
 using System.Collections;
 namespace ConfigManager
 {
@@ -41,7 +39,9 @@ namespace ConfigManager
         /// <param name="value"></param>
         public void AddCollectionDataToConfig(string name, IList value);
 
-        public IList GetCollectionFromConfig(string name);
+        public void SetCollectionDataInConfig(string name, IList value);
+
+        public string[] GetCollectionDataFromConfig(string name);
 
         /// <summary>
         /// Tries get parameter in config.
